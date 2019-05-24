@@ -3,6 +3,7 @@
 import { ArgumentParser } from "argparse";
 import stackman from "stackman";
 import { runGsheetCreate } from "./runGsheetCreate";
+import { runGsheetExport } from "./runGsheetExport";
 import { runGsheetImport } from "./runGsheetImport";
 
 process.once("unhandledRejection", (err: Error, _p) => {
@@ -72,14 +73,23 @@ try {
     help: "gsheetImport",
     required: false,
   });
+  parser.addArgument(["--gsheetExport"], {
+    help: "gsheetExport",
+    required: false,
+  });
   parser.addArgument(["--spreadsheetId"], {
     help: "spreadsheetId",
     required: false,
   });
-  parser.addArgument(["--targetPath"], {
-    help: "targetPath",
+  parser.addArgument(["--networksJsPath"], {
+    help: "networksJsPath",
     required: false,
   });
+  parser.addArgument(["--networkName"], {
+    help: "networkName",
+    required: false,
+  });
+
   const args = parser.parseArgs();
   console.log("CLI arguments: ", args, "\n");
 
@@ -88,8 +98,10 @@ try {
     gsheetsApiCredentialsFile,
     gsheetCreate,
     gsheetImport,
+    gsheetExport,
     spreadsheetId,
-    targetPath,
+    networksJsPath,
+    networkName,
   } = args;
 
   (async () => {
@@ -103,11 +115,30 @@ try {
     }
 
     if (gsheetImport) {
+      if (!networkName) {
+        throw new Error("Network name is not specified");
+      }
       await runGsheetImport(
         googleOauth2ClientId,
         gsheetsApiCredentialsFile,
         spreadsheetId,
-        targetPath,
+        networksJsPath,
+        networkName,
+      ).catch(error => {
+        throw new Error(error);
+      });
+    }
+
+    if (gsheetExport) {
+      if (!networkName) {
+        throw new Error("Network name is not specified");
+      }
+      await runGsheetExport(
+        googleOauth2ClientId,
+        gsheetsApiCredentialsFile,
+        spreadsheetId,
+        networksJsPath,
+        networkName,
       ).catch(error => {
         throw new Error(error);
       });

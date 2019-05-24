@@ -1,4 +1,6 @@
-# generic-gsheets-cli
+# Cytoscape Gsheets cli
+
+Allows using Google Spreadsheets to edit [Cytoscape](https://cytoscape.org/) networks
 
 ## Typical run commands
 
@@ -10,7 +12,19 @@ npm run build && npm run cli -- \
   --gsheetsApiCredentialsFile "$GSHEETS_API_CREDENTIALS_FILE" \
   --gsheetImport 1 \
   --spreadsheetId "<use-one-created-using-gsheetCreate>" \
-  --targetPath "imported-data.json"
+  --networksJsPath "networks.js" \
+  --networkName "Foo"
+```
+
+Push Cytoscape data to Gsheets:
+```
+npm run build && npm run cli -- \
+  --googleOauth2ClientId "$GOOGLE_OAUTH2_CLIENT_ID" \
+  --gsheetsApiCredentialsFile "$GSHEETS_API_CREDENTIALS_FILE" \
+  --gsheetExport 1 \
+  --spreadsheetId "<use-one-created-using-gsheetCreate>" \
+  --networksJsPath "networks.js" \
+  --networkName "Foo"
 ```
 
 Create a Google Spreadsheet to use with this cli:

@@ -10,7 +10,8 @@ export async function runGsheetImport(
   googleOauth2ClientId,
   gsheetsApiCredentialsFile,
   spreadsheetId,
-  targetPath,
+  networksJsPath,
+  networkName,
 ) {
   const gsheets = new Gsheets(
     await acquireAuthenticatedGoogleOauth2Client(
@@ -46,9 +47,18 @@ export async function runGsheetImport(
     }),
   );
 
+  // Convert to Cytoscape networks.js format
+  // TODO
+
+  const networksJs = {};
+  networksJs[networkName] = importedData;
+
   // Save imported data to file
-  fs.writeFileSync(targetPath, JSON.stringify(importedData));
-  console.info(`CLI: Saved imported data in "${targetPath}"`);
+  fs.writeFileSync(
+    networksJsPath,
+    "var networks = " + JSON.stringify(networksJs),
+  );
+  console.info(`CLI: Saved imported data in "${networksJsPath}"`);
 
   return true;
 }
