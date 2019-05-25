@@ -1,30 +1,9 @@
 /* tslint:disable:no-console */
 
 // import {relatedNodes} from "./common";
+import { getExpectedColumns } from "../common";
+import { columns, getEdgeDataKeys } from "./edges";
 import { Edge, Network } from "./networksJs";
-
-export const columns = [
-  {
-    key: "id",
-    name: "Id",
-  },
-  {
-    key: "name",
-    name: "Name",
-  },
-  {
-    key: "sync_status",
-    name: "Sync status",
-  },
-  {
-    key: "source",
-    name: "Source",
-  },
-  {
-    key: "target",
-    name: "Target",
-  },
-];
 
 export const edgesExport = async (
   existingRows,
@@ -34,49 +13,17 @@ export const edgesExport = async (
     return [];
   }
 
-  const firstElement = network.elements.edges[0];
-  const dataKeys = Object.keys(firstElement.data);
-
   // prepare graceful export
   const existingHeaderRows: any[][] = existingRows.slice(0, 1);
   const existingValueRows: any[][] = existingRows.slice(1);
 
   // set up expected keys and headers
-  const expectedColumns = [];
-
-  // if existingHeaderRows has existing values, use it as basis of map, and tag everything new on the end
-  if (existingHeaderRows[0]) {
-    existingHeaderRows[0].map(existingHeaderName => {
-      const existingHeaderColumn = columns.find(
-        column => column.name === existingHeaderName,
-      );
-      if (existingHeaderColumn) {
-        expectedColumns.push(existingHeaderColumn);
-      } else {
-        expectedColumns.push({
-          key: existingHeaderName,
-          name: existingHeaderName,
-        });
-      }
-    });
-  }
-  columns.map(column => {
-    if (
-      !expectedColumns.find(expectedColumn => expectedColumn.key === column.key)
-    ) {
-      expectedColumns.push(column);
-    }
-  });
-  for (const dataKey of dataKeys) {
-    if (
-      !expectedColumns.find(expectedColumn => expectedColumn.key === dataKey)
-    ) {
-      expectedColumns.push({
-        key: dataKey,
-        name: dataKey,
-      });
-    }
-  }
+  const dataKeys = getEdgeDataKeys(network);
+  const expectedColumns = getExpectedColumns(
+    columns,
+    existingHeaderRows,
+    dataKeys,
+  );
   const expectedHeaderRow = expectedColumns.map(
     expectedColumn => expectedColumn.name,
   );

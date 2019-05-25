@@ -2,6 +2,9 @@
 
 import fs from "fs";
 import { getExistingRows } from "./common";
+import { edgesImport } from "./cytoscape/edgesImport";
+import { Convert, Network } from "./cytoscape/networksJs";
+import { nodesImport } from "./cytoscape/nodesImport";
 import { Gsheets } from "./Gsheets";
 import { acquireAuthenticatedGoogleOauth2Client } from "./runGoogleDriveAuth";
 import { scopes } from "./scopes";
@@ -29,17 +32,18 @@ export async function runGsheetImport(
     throw new Error("Missing spreadsheetId");
   }
 
+  // fetch all spreadsheet data
   const spreadsheetMetadata = await gsheets.getSpreadsheetMetadata(
     spreadsheetId,
   );
 
-  const importedData = new Map();
+  const spreadsheetData: { [k: string]: any[][] } = {};
 
   await Promise.all(
     spreadsheetMetadata.sheets.map(async sheetInfo => {
       const sheetName = sheetInfo.properties.title;
       console.info(`CLI: Importing data from "${sheetName}"`);
-      importedData[sheetName] = await getExistingRows(
+      spreadsheetData[sheetName] = await getExistingRows(
         gsheets,
         spreadsheetId,
         sheetName,
@@ -47,18 +51,34 @@ export async function runGsheetImport(
     }),
   );
 
-  // Convert to Cytoscape networks.js format
-  // TODO
+  // console.log(spreadsheetData.nodes, spreadsheetData.edges);
 
-  const networksJs = {};
-  networksJs[networkName] = importedData;
+  // Use the target network js file as the base for the imported data
+  const networksJsFileContents = fs.readFileSync(networksJsPath, "utf8");
+  const networksJsJson = networksJsFileContents.substring(
+    networksJsFileContents.indexOf("{"),
+  );
+  const networksJs = JSON.parse(networksJsJson);
+  const network: Network = Convert.toNetwork(
+    JSON.stringify(networksJs[networkName]),
+  );
 
-  // Save imported data to file
+  // Insert our modifications
+  network.elements.nodes = await nodesImport(network, spreadsheetData.nodes);
+  network.elements.edges = await edgesImport(network, spreadsheetData.edges);
+  networksJs[networkName] = network;
+
+  // Save the imported data to the target networkjs file
   fs.writeFileSync(
     networksJsPath,
-    "var networks = " + JSON.stringify(networksJs),
+    "var networks = " + JSON.stringify(networksJs, null, 2),
   );
   console.info(`CLI: Saved imported data in "${networksJsPath}"`);
+
+  // Also save in Cytoscape networks.js format directly
+  const cyJsPath = networksJsPath + ".cyjs";
+  fs.writeFileSync(cyJsPath, Convert.networkToJson(network));
+  console.info(`CLI: Saved imported data also in "${cyJsPath}"`);
 
   return true;
 }

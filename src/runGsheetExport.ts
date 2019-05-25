@@ -36,14 +36,14 @@ const writeUpdatedValues = async (
 
 export async function runGsheetExport(
   googleOauth2ClientId,
-  gsheetsApiCredentialsNode,
+  gsheetsApiCredentialsFile,
   spreadsheetId,
   networksJsPath,
   networkName,
 ) {
   const gsheets = new Gsheets(
     await acquireAuthenticatedGoogleOauth2Client(
-      gsheetsApiCredentialsNode,
+      gsheetsApiCredentialsFile,
       googleOauth2ClientId,
       scopes,
     ),

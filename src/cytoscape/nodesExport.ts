@@ -1,82 +1,29 @@
 /* tslint:disable:no-console */
 
 // import {relatedEdges} from "./common";
+import { getExpectedColumns } from "../common";
 import { Network, Node } from "./networksJs";
-
-export const columns = [
-  {
-    key: "id",
-    name: "Id",
-  },
-  {
-    key: "name",
-    name: "Name",
-  },
-  {
-    key: "sync_status",
-    name: "Sync status",
-  },
-];
+import { columns, getNodeDataKeys } from "./nodes";
 
 export const nodesExport = async (
-  existingRows,
+  existingSpreadsheetRows: any[][],
   network: Network,
 ): Promise<any[][]> => {
   if (network.elements.nodes.length === 0) {
     return [];
   }
 
-  const dataKeys = [];
-  network.elements.nodes.map(node => {
-    for (const dataKey of Object.keys(node.data).concat(
-      Object.keys(node.position),
-    )) {
-      if (!dataKeys.includes(dataKey)) {
-        dataKeys.push(dataKey);
-      }
-    }
-  });
-
   // prepare graceful export
-  const existingHeaderRows: any[][] = existingRows.slice(0, 1);
-  const existingValueRows: any[][] = existingRows.slice(1);
+  const existingHeaderRows: any[][] = existingSpreadsheetRows.slice(0, 1);
+  const existingValueRows: any[][] = existingSpreadsheetRows.slice(1);
 
   // set up expected keys and headers
-  const expectedColumns = [];
-
-  // if existingHeaderRows has existing values, use it as basis of map, and tag everything new on the end
-  if (existingHeaderRows[0]) {
-    existingHeaderRows[0].map(existingHeaderName => {
-      const existingHeaderColumn = columns.find(
-        column => column.name === existingHeaderName,
-      );
-      if (existingHeaderColumn) {
-        expectedColumns.push(existingHeaderColumn);
-      } else {
-        expectedColumns.push({
-          key: existingHeaderName,
-          name: existingHeaderName,
-        });
-      }
-    });
-  }
-  columns.map(column => {
-    if (
-      !expectedColumns.find(expectedColumn => expectedColumn.key === column.key)
-    ) {
-      expectedColumns.push(column);
-    }
-  });
-  for (const dataKey of dataKeys) {
-    if (
-      !expectedColumns.find(expectedColumn => expectedColumn.key === dataKey)
-    ) {
-      expectedColumns.push({
-        key: dataKey,
-        name: dataKey,
-      });
-    }
-  }
+  const dataKeys = getNodeDataKeys(network);
+  const expectedColumns = getExpectedColumns(
+    columns,
+    existingHeaderRows,
+    dataKeys,
+  );
   const expectedHeaderRow = expectedColumns.map(
     expectedColumn => expectedColumn.name,
   );

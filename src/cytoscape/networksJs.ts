@@ -55,10 +55,7 @@ export interface EdgeData extends EdgeDataDefinition {
   shared_interaction: string;
   name: string;
   interaction: string;
-  SUID: number;
-  BEND_MAP_ID?: number;
   selected: boolean;
-  refid?: number;
 }
 
 export interface Node {
@@ -71,7 +68,6 @@ export interface NodeData extends NodeDataDefinition {
   id: string;
   shared_name: string;
   name: string;
-  SUID: number;
   selected: boolean;
 }
 
@@ -232,9 +228,11 @@ function a(typ: any) {
   return { arrayItems: typ };
 }
 
+/*
 function u(...typs: any[]) {
   return { unionMembers: typs };
 }
+ */
 
 function o(props: any[], additional: any) {
   return { props, additional };
@@ -293,8 +291,6 @@ const typeMap: any = {
       { json: "shared_interaction", js: "shared_interaction", typ: "" },
       { json: "name", js: "name", typ: "" },
       { json: "interaction", js: "interaction", typ: "" },
-      { json: "SUID", js: "SUID", typ: 0 },
-      { json: "BEND_MAP_ID", js: "BEND_MAP_ID", typ: u(undefined, 0) },
       { json: "selected", js: "selected", typ: true },
     ],
     "_any_",
@@ -312,7 +308,6 @@ const typeMap: any = {
       { json: "id", js: "id", typ: "" },
       { json: "shared_name", js: "shared_name", typ: "" },
       { json: "name", js: "name", typ: "" },
-      { json: "SUID", js: "SUID", typ: 0 },
       { json: "selected", js: "selected", typ: true },
     ],
     "_any_",
