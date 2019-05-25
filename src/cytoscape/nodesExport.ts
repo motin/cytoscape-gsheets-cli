@@ -3,26 +3,98 @@
 // import {relatedEdges} from "./common";
 import { Network, Node } from "./networksJs";
 
-export const cytoscapeNodesHeaderRows = [["Id", "Name", "Sync status"]];
+export const columns = [
+  {
+    key: "id",
+    name: "Id",
+  },
+  {
+    key: "name",
+    name: "Name",
+  },
+  {
+    key: "sync_status",
+    name: "Sync status",
+  },
+];
 
 export const nodesExport = async (
   existingRows,
   network: Network,
 ): Promise<any[][]> => {
-  // prepare rows to export
-  const headerRows = cytoscapeNodesHeaderRows;
-  const ensuredColumnIndex = (header: string) => {
-    const index = headerRows[0].indexOf(header);
+  if (network.elements.nodes.length === 0) {
+    return [];
+  }
+
+  const dataKeys = [];
+  network.elements.nodes.map(node => {
+    for (const dataKey of Object.keys(node.data).concat(
+      Object.keys(node.position),
+    )) {
+      if (!dataKeys.includes(dataKey)) {
+        dataKeys.push(dataKey);
+      }
+    }
+  });
+
+  // prepare graceful export
+  const existingHeaderRows: any[][] = existingRows.slice(0, 1);
+  const existingValueRows: any[][] = existingRows.slice(1);
+
+  // set up expected keys and headers
+  const expectedColumns = [];
+
+  // if existingHeaderRows has existing values, use it as basis of map, and tag everything new on the end
+  if (existingHeaderRows[0]) {
+    existingHeaderRows[0].map(existingHeaderName => {
+      const existingHeaderColumn = columns.find(
+        column => column.name === existingHeaderName,
+      );
+      if (existingHeaderColumn) {
+        expectedColumns.push(existingHeaderColumn);
+      } else {
+        expectedColumns.push({
+          key: existingHeaderName,
+          name: existingHeaderName,
+        });
+      }
+    });
+  }
+  columns.map(column => {
+    if (
+      !expectedColumns.find(expectedColumn => expectedColumn.key === column.key)
+    ) {
+      expectedColumns.push(column);
+    }
+  });
+  for (const dataKey of dataKeys) {
+    if (
+      !expectedColumns.find(expectedColumn => expectedColumn.key === dataKey)
+    ) {
+      expectedColumns.push({
+        key: dataKey,
+        name: dataKey,
+      });
+    }
+  }
+  const expectedHeaderRow = expectedColumns.map(
+    expectedColumn => expectedColumn.name,
+  );
+
+  console.log({ expectedColumns, expectedHeaderRow });
+
+  const ensuredColumnIndex = (key: string) => {
+    const index = expectedColumns.findIndex(column => column.key === key);
     if (index < 0) {
-      throw new Error(`Header not found: '${header}'`);
+      throw new Error(`Column not found: key='${key}'`);
     }
     return index;
   };
-  const idColIndex = ensuredColumnIndex("Id");
-  const nameColIndex = ensuredColumnIndex("Name");
-  const syncStatusColIndex = ensuredColumnIndex("Sync status");
+  const idColIndex = ensuredColumnIndex("id");
+  const nameColIndex = ensuredColumnIndex("name");
+  const syncStatusColIndex = ensuredColumnIndex("sync_status");
   const noopUpdateRow = (): any[] => {
-    return Array(cytoscapeNodesHeaderRows.length).fill(undefined);
+    return Array(expectedColumns.length).fill(undefined);
   };
   const mapNodeToValueRow = async (node: Node): Promise<any[]> => {
     const valueRow = noopUpdateRow();
@@ -49,27 +121,21 @@ export const nodesExport = async (
     */
 
     valueRow[idColIndex] = node.data.id;
-    valueRow[nameColIndex] = "Foo";
+    valueRow[nameColIndex] = node.data.name;
+
+    // for each property in node.data
+    for (const key of Object.keys(node.data)) {
+      if (["id", "name"].includes(key)) {
+        continue;
+      }
+      valueRow[ensuredColumnIndex(key)] = String(node.data[key]);
+    }
+    for (const key of Object.keys(node.position)) {
+      valueRow[ensuredColumnIndex(key)] = String(node.position[key]);
+    }
+
     return valueRow;
   };
-
-  // prepare graceful export
-  const existingHeaderRows: any[][] = existingRows.slice(0, 1);
-  const existingValueRows: any[][] = existingRows.slice(1);
-
-  // ensure that the columns are laid out the way we expect them to
-  // TODO: instead detect existing columns and adapt the export to accommodate the custom layout
-  if (JSON.stringify(existingHeaderRows) !== JSON.stringify(headerRows)) {
-    console.warn(
-      "Existing header rows:",
-      "\n",
-      JSON.stringify(existingHeaderRows),
-      "... must match:",
-      "\n",
-      JSON.stringify(headerRows),
-    );
-    throw new Error("Safety stop");
-  }
 
   // build the updated content based on the existing rows
   const mergeWithExistingValueRow = async (
@@ -116,5 +182,5 @@ export const nodesExport = async (
   const valueRows = mergedValueRows.concat(newRows);
 
   // export the updated content
-  return headerRows.concat(valueRows);
+  return [expectedHeaderRow].concat(valueRows);
 };
