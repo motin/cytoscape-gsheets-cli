@@ -4,20 +4,18 @@ Allows using Google Spreadsheets to edit [Cytoscape](https://cytoscape.org/) net
 
 ## Typical run commands
 
-Import data from Gsheets:
+Create a Google Spreadsheet to use with this cli:
 ```
 source .env.example
 npm run build && npm run cli -- \
   --googleOauth2ClientId "$GOOGLE_OAUTH2_CLIENT_ID" \
   --gsheetsApiCredentialsFile "$GSHEETS_API_CREDENTIALS_FILE" \
-  --gsheetImport 1 \
-  --spreadsheetId "<use-one-created-using-gsheetCreate>" \
-  --networksJsPath "networks.js" \
-  --networkName "Foo"
+  --gsheetCreate 1
 ```
 
-Push Cytoscape data to Gsheets:
+Push Cytoscape networks.js data to Gsheets:
 ```
+source .env.example
 npm run build && npm run cli -- \
   --googleOauth2ClientId "$GOOGLE_OAUTH2_CLIENT_ID" \
   --gsheetsApiCredentialsFile "$GSHEETS_API_CREDENTIALS_FILE" \
@@ -27,11 +25,14 @@ npm run build && npm run cli -- \
   --networkName "Foo"
 ```
 
-Create a Google Spreadsheet to use with this cli:
+Import data from Gsheets into networks.js:
 ```
 source .env.example
 npm run build && npm run cli -- \
   --googleOauth2ClientId "$GOOGLE_OAUTH2_CLIENT_ID" \
   --gsheetsApiCredentialsFile "$GSHEETS_API_CREDENTIALS_FILE" \
-  --gsheetCreate 1
+  --gsheetImport 1 \
+  --spreadsheetId "<use-one-created-using-gsheetCreate>" \
+  --networksJsPath "networks.js" \
+  --networkName "Foo"
 ```
