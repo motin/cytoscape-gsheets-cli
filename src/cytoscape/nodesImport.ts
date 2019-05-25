@@ -1,7 +1,10 @@
 /* tslint:disable:no-console */
 
 // import {relatedEdges} from "./common";
-import { getColumnByName, getExpectedColumns } from "../common";
+import {
+  convertSpreadsheetRowsToJsObjects,
+  getExpectedColumns,
+} from "../common";
 import { Network, Node } from "./networksJs";
 import { columns, getNodeDataKeys } from "./nodes";
 
@@ -27,14 +30,11 @@ export const nodesImport = async (
   console.log({ expectedColumns, expectedHeaderRow });
 
   // convert spreadsheet rows to js objects
-  const spreadsheetItems = valueRows.map(valueRow => {
-    return headerRows[0].reduce((_, header, index) => {
-      const value = valueRow[index];
-      _[getColumnByName(expectedColumns, header).key] =
-        typeof value === "boolean" ? value : String(valueRow[index]);
-      return _;
-    }, {});
-  });
+  const spreadsheetItems = convertSpreadsheetRowsToJsObjects(
+    valueRows,
+    headerRows,
+    expectedColumns,
+  );
   console.log({ spreadsheetItems });
 
   const mapSpreadsheetItemToNode = async (

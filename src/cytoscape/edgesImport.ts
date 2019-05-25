@@ -1,7 +1,10 @@
 /* tslint:disable:no-console */
 
 // import {relatedNodes} from "./common";
-import { getColumnByName, getExpectedColumns } from "../common";
+import {
+  convertSpreadsheetRowsToJsObjects,
+  getExpectedColumns,
+} from "../common";
 import { columns, getEdgeDataKeys } from "./edges";
 import { Edge, Network } from "./networksJs";
 
@@ -27,14 +30,11 @@ export const edgesImport = async (
   console.log({ expectedColumns, expectedHeaderRow });
 
   // convert spreadsheet rows to js objects
-  const spreadsheetItems = valueRows.map(valueRow => {
-    return headerRows[0].reduce((_, header, index) => {
-      const value = valueRow[index];
-      _[getColumnByName(expectedColumns, header).key] =
-        typeof value === "boolean" ? value : String(valueRow[index]);
-      return _;
-    }, {});
-  });
+  const spreadsheetItems = convertSpreadsheetRowsToJsObjects(
+    valueRows,
+    headerRows,
+    expectedColumns,
+  );
   console.log({ spreadsheetItems });
 
   const mapSpreadsheetItemToEdge = async (

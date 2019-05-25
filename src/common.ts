@@ -66,6 +66,27 @@ export const getColumnByName = ($columns, name: string) => {
   return column;
 };
 
+export const convertSpreadsheetRowsToJsObjects = (
+  spreadsheetRows,
+  headerRows,
+  expectedColumns,
+) => {
+  return spreadsheetRows.map(valueRow => {
+    return headerRows[0].reduce((_, header, index) => {
+      const value = valueRow[index];
+      _[getColumnByName(expectedColumns, header).key] = [
+        "boolean",
+        "undefined",
+      ].includes(typeof value)
+        ? value
+        : value === "undefined"
+        ? undefined
+        : String(valueRow[index]);
+      return _;
+    }, {});
+  });
+};
+
 export const relatedEdges = (_network: Network, _node: NodeData) => {
   return [];
 };
