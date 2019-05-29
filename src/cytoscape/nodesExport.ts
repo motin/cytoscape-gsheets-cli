@@ -81,6 +81,11 @@ export const nodesExport = async (
       valueRow[ensuredColumnIndex(key)] = String(node.position[key]);
     }
 
+    // use original ids if available
+    if (node.data.id_original) {
+      valueRow[idColIndex] = node.data.id_original;
+    }
+
     return valueRow;
   };
 
@@ -93,9 +98,12 @@ export const nodesExport = async (
     let mergedRow: any[];
 
     // check if we can safely update this row with new node-based attributes
-    const matchingNode = network.elements.nodes.find(
-      (node: Node) => String(node.data.id) === String(existingId),
-    );
+    const matchingNode = network.elements.nodes.find((node: Node) => {
+      if (node.data.id_original) {
+        return String(node.data.id_original) === String(existingId);
+      }
+      return String(node.data.id) === String(existingId);
+    });
     if (matchingNode) {
       // remove the node from the nodes array
       network.elements.nodes.splice(

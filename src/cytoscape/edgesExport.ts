@@ -80,6 +80,17 @@ export const edgesExport = async (
       valueRow[ensuredColumnIndex(key)] = String(edge.data[key]);
     }
 
+    // use original ids if available
+    if (edge.data.id_original) {
+      valueRow[idColIndex] = edge.data.id_original;
+    }
+    if (edge.data.source_original) {
+      valueRow[ensuredColumnIndex("source")] = edge.data.source_original;
+    }
+    if (edge.data.target_original) {
+      valueRow[ensuredColumnIndex("target")] = edge.data.target_original;
+    }
+
     return valueRow;
   };
 
@@ -92,9 +103,12 @@ export const edgesExport = async (
     let mergedRow: any[];
 
     // check if we can safely update this row with new edge-based attributes
-    const matchingEdge = network.elements.edges.find(
-      (edge: Edge) => String(edge.data.id) === String(existingId),
-    );
+    const matchingEdge = network.elements.edges.find((edge: Edge) => {
+      if (edge.data.id_original) {
+        return String(edge.data.id_original) === String(existingId);
+      }
+      return String(edge.data.id) === String(existingId);
+    });
     if (matchingEdge) {
       // remove the edge from the edges array
       network.elements.edges.splice(
