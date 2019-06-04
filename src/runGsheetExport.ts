@@ -1,38 +1,13 @@
 /* tslint:disable:no-console */
 
 import fs from "fs";
-import { getExistingRows } from "./common";
+import { getExistingRows, writeUpdatedValues } from "./common";
 import { edgesExport } from "./cytoscape/edgesExport";
 import { Convert, Network } from "./cytoscape/networksJs";
 import { nodesExport } from "./cytoscape/nodesExport";
 import { Gsheets } from "./Gsheets";
 import { acquireAuthenticatedGoogleOauth2Client } from "./runGoogleDriveAuth";
 import { scopes } from "./scopes";
-
-const writeUpdatedValues = async (
-  gsheets,
-  spreadsheetId,
-  sheetName,
-  updatedValues,
-) => {
-  // target range
-  const range = `${sheetName}`;
-
-  console.info(`CLI: Writing ${updatedValues.length} rows to "${sheetName}"`);
-  await gsheets
-    .writeSpreadsheetValues(spreadsheetId, updatedValues, range)
-    .catch(err => {
-      console.error({ err });
-      throw new Error(err);
-    });
-
-  // read back the current contents of the sheet
-  const rows = await gsheets.getValues(spreadsheetId, range).catch(err => {
-    console.error({ err });
-    throw new Error(err);
-  });
-  console.log("CLI: Rows count in exported sheet after export", rows.length);
-};
 
 export async function runGsheetExport(
   googleOauth2ClientId,

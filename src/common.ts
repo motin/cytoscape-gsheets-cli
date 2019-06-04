@@ -1,8 +1,13 @@
 /* tslint:disable:no-console */
 
 import { Network, NodeData } from "./cytoscape/networksJs";
+import { Gsheets } from "./Gsheets";
 
-export const getExistingRows = async (gsheets, spreadsheetId, sheetName) => {
+export const getExistingRows = async (
+  gsheets: Gsheets,
+  spreadsheetId,
+  sheetName,
+) => {
   const range = `${sheetName}`;
   const existingRows: any[][] = await gsheets
     .getValues(spreadsheetId, range)
@@ -13,6 +18,31 @@ export const getExistingRows = async (gsheets, spreadsheetId, sheetName) => {
     `CLI: Rows count in sheet "${sheetName}": ${existingRows.length}`,
   );
   return existingRows;
+};
+
+export const writeUpdatedValues = async (
+  gsheets,
+  spreadsheetId,
+  sheetName,
+  updatedValues,
+) => {
+  // target range
+  const range = `${sheetName}`;
+
+  console.info(`CLI: Writing ${updatedValues.length} rows to "${sheetName}"`);
+  await gsheets
+    .writeSpreadsheetValues(spreadsheetId, updatedValues, range)
+    .catch(err => {
+      console.error({ err });
+      throw new Error(err);
+    });
+
+  // read back the current contents of the sheet
+  const rows = await gsheets.getValues(spreadsheetId, range).catch(err => {
+    console.error({ err });
+    throw new Error(err);
+  });
+  console.log("CLI: Rows count in exported sheet after export", rows.length);
 };
 
 export const getExpectedColumns = (
