@@ -38,7 +38,6 @@ export const nodesExport = async (
     return index;
   };
   const idColIndex = ensuredColumnIndex("id");
-  const nameColIndex = ensuredColumnIndex("name");
   const syncStatusColIndex = ensuredColumnIndex("sync_status");
   const noopUpdateRow = (): any[] => {
     return Array(expectedColumns.length).fill(undefined);
@@ -67,12 +66,12 @@ export const nodesExport = async (
     }
     */
 
-    valueRow[idColIndex] = node.data.id;
-    valueRow[nameColIndex] = node.data.name;
-
     // for each property in node.data
     for (const key of Object.keys(node.data)) {
-      if (["id", "name"].includes(key)) {
+      // ignore those that are formulas - they should not be overwritten
+      if (
+        columns.find((column) => column.key === key && column.formula)
+      ) {
         continue;
       }
       valueRow[ensuredColumnIndex(key)] = String(node.data[key]);
@@ -112,12 +111,12 @@ export const nodesExport = async (
       );
       // update the pre-existing rows - being sure to set undefined for columns that we do not want to modify
       mergedRow = await mapNodeToValueRow(matchingNode);
+      mergedRow[syncStatusColIndex] = "Merged";
     } else {
       // annotate the rows that have no corresponding hash in the database
       mergedRow = noopUpdateRow();
       mergedRow[syncStatusColIndex] = "Orphaned";
       mergedRow[idColIndex] = existingId;
-      mergedRow[nameColIndex] = existingValueRow[nameColIndex];
     }
 
     return mergedRow;

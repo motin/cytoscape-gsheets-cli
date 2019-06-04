@@ -40,6 +40,12 @@ export const edgesImport = async (
   const mapSpreadsheetItemToEdge = async (
     spreadsheetItem: any,
   ): Promise<Edge> => {
+    if (spreadsheetItem.width) {
+      spreadsheetItem.width = parseInt(
+        spreadsheetItem.width,
+        10,
+      );
+    }
     return {
       data: spreadsheetItem,
       selected: false,

@@ -67,14 +67,12 @@ export const edgesExport = async (
     }
     */
 
-    valueRow[idColIndex] = edge.data.id;
-    valueRow[nameColIndex] = edge.data.name;
-    valueRow[ensuredColumnIndex("source")] = edge.data.source;
-    valueRow[ensuredColumnIndex("target")] = edge.data.target;
-
     // for each property in edge.data
     for (const key of dataKeys) {
-      if (["id", "name", "source", "target"].includes(key)) {
+      // ignore those that are formulas - they should not be overwritten
+      if (
+        columns.find((column) => column.key === key && column.formula)
+      ) {
         continue;
       }
       valueRow[ensuredColumnIndex(key)] = String(edge.data[key]);
