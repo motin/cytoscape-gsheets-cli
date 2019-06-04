@@ -6,9 +6,9 @@ export const columns = [
     name: "Id",
   },
   {
+    formula: true,
     key: "name",
     name: "Name",
-    formula: true,
   },
   {
     key: "type",
@@ -19,24 +19,24 @@ export const columns = [
     name: "Sync status",
   },
   {
+    formula: true,
     key: "shared_name",
     name: "Shared Name",
-    formula: true,
   },
   {
+    formula: true,
     key: "size",
     name: "Size",
-    formula: true,
   },
   {
+    formula: true,
     key: "label_font_size",
     name: "Label font size",
-    formula: true,
   },
   {
+    formula: true,
     key: "suid",
     name: "SUID",
-    formula: true,
   },
 ];
 

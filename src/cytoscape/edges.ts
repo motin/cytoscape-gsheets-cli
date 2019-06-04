@@ -6,9 +6,9 @@ export const columns = [
     name: "Id",
   },
   {
+    formula: true,
     key: "name",
     name: "Name",
-    formula: true,
   },
   {
     key: "sync_status",
@@ -19,33 +19,38 @@ export const columns = [
     name: "Source",
   },
   {
+    formula: true,
     key: "source_name",
     name: "Source Name",
-    formula: true,
   },
   {
     key: "target",
     name: "Target",
   },
   {
+    formula: true,
     key: "target_name",
     name: "Target Name",
-    formula: true,
   },
   {
+    formula: true,
     key: "shared_name",
     name: "Shared Name",
-    formula: true,
   },
   {
+    formula: true,
     key: "width",
     name: "Width",
-    formula: true,
   },
   {
+    formula: true,
     key: "suid",
     name: "SUID",
+  },
+  {
     formula: true,
+    key: "shared_interaction",
+    name: "shared_interaction",
   },
 ];
 

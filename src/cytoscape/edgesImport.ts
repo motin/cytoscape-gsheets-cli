@@ -41,10 +41,7 @@ export const edgesImport = async (
     spreadsheetItem: any,
   ): Promise<Edge> => {
     if (spreadsheetItem.width) {
-      spreadsheetItem.width = parseInt(
-        spreadsheetItem.width,
-        10,
-      );
+      spreadsheetItem.width = parseInt(spreadsheetItem.width, 10);
     }
     return {
       data: spreadsheetItem,
