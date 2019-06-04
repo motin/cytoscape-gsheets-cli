@@ -25,6 +25,16 @@ npm run build && npm run cli -- \
   --networkName "Foo"
 ```
 
+Check and fix relational data in Gsheets:
+```
+source .env.example
+npm run build && npm run cli -- \
+  --googleOauth2ClientId "$GOOGLE_OAUTH2_CLIENT_ID" \
+  --gsheetsApiCredentialsFile "$GSHEETS_API_CREDENTIALS_FILE" \
+  --gsheetFix 1 \
+  --spreadsheetId "<use-one-created-using-gsheetCreate>"
+```
+
 Import data from Gsheets into networks.js:
 ```
 source .env.example

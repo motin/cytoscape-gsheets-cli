@@ -4,6 +4,7 @@ import { ArgumentParser } from "argparse";
 import stackman from "stackman";
 import { runGsheetCreate } from "./runGsheetCreate";
 import { runGsheetExport } from "./runGsheetExport";
+import { runGsheetFix } from "./runGsheetFix";
 import { runGsheetImport } from "./runGsheetImport";
 
 process.once("unhandledRejection", (err: Error, _p) => {
@@ -77,6 +78,10 @@ try {
     help: "gsheetExport",
     required: false,
   });
+  parser.addArgument(["--gsheetFix"], {
+    help: "gsheetFix",
+    required: false,
+  });
   parser.addArgument(["--spreadsheetId"], {
     help: "spreadsheetId",
     required: false,
@@ -99,6 +104,7 @@ try {
     gsheetCreate,
     gsheetImport,
     gsheetExport,
+    gsheetFix,
     spreadsheetId,
     networksJsPath,
     networkName,
@@ -139,6 +145,16 @@ try {
         spreadsheetId,
         networksJsPath,
         networkName,
+      ).catch(error => {
+        throw new Error(error);
+      });
+    }
+
+    if (gsheetFix) {
+      await runGsheetFix(
+        googleOauth2ClientId,
+        gsheetsApiCredentialsFile,
+        spreadsheetId,
       ).catch(error => {
         throw new Error(error);
       });

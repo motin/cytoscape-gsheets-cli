@@ -44,31 +44,31 @@ export interface Elements {
 
 export interface Edge {
   data: EdgeData;
-  selected: boolean;
+  selected?: boolean;
 }
 
 export interface EdgeData extends EdgeDataDefinition {
   id: string;
   source: string;
   target: string;
-  shared_name: string;
-  shared_interaction: string;
-  name: string;
+  shared_name?: string;
+  shared_interaction?: string;
+  name?: string;
   interaction: string;
-  selected: boolean;
+  selected?: boolean;
 }
 
 export interface Node {
   data: NodeData;
   position: Position;
-  selected: boolean;
+  selected?: boolean;
 }
 
 export interface NodeData extends NodeDataDefinition {
   id: string;
-  shared_name: string;
-  name: string;
-  selected: boolean;
+  shared_name?: string;
+  name?: string;
+  selected?: boolean;
 }
 
 export interface Position {

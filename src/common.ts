@@ -96,6 +96,13 @@ export const getColumnByName = ($columns, name: string) => {
   return column;
 };
 
+export const naiveAutoCastFromAndToSpreadsheetAwarePrimitives = value =>
+  ["boolean", "undefined"].includes(typeof value)
+    ? value
+    : value === "undefined"
+    ? undefined
+    : String(value);
+
 export const convertSpreadsheetRowsToJsObjects = (
   spreadsheetRows,
   headerRows,
@@ -104,14 +111,8 @@ export const convertSpreadsheetRowsToJsObjects = (
   return spreadsheetRows.map(valueRow => {
     return headerRows[0].reduce((_, header, index) => {
       const value = valueRow[index];
-      _[getColumnByName(expectedColumns, header).key] = [
-        "boolean",
-        "undefined",
-      ].includes(typeof value)
-        ? value
-        : value === "undefined"
-        ? undefined
-        : String(valueRow[index]);
+      const castValue = naiveAutoCastFromAndToSpreadsheetAwarePrimitives(value);
+      _[getColumnByName(expectedColumns, header).key] = castValue;
       return _;
     }, {});
   });

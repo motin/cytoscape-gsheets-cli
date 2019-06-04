@@ -1,7 +1,10 @@
 /* tslint:disable:no-console */
 
 // import {relatedEdges} from "./common";
-import { getExpectedColumns } from "../common";
+import {
+  getExpectedColumns,
+  naiveAutoCastFromAndToSpreadsheetAwarePrimitives,
+} from "../common";
 import { Network, Node } from "./networksJs";
 import { columns, getNodeDataKeys } from "./nodes";
 
@@ -72,10 +75,14 @@ export const nodesExport = async (
       if (columns.find(column => column.key === key && column.formula)) {
         continue;
       }
-      valueRow[ensuredColumnIndex(key)] = String(node.data[key]);
+      valueRow[
+        ensuredColumnIndex(key)
+      ] = naiveAutoCastFromAndToSpreadsheetAwarePrimitives(node.data[key]);
     }
     for (const key of Object.keys(node.position)) {
-      valueRow[ensuredColumnIndex(key)] = String(node.position[key]);
+      valueRow[
+        ensuredColumnIndex(key)
+      ] = naiveAutoCastFromAndToSpreadsheetAwarePrimitives(node.position[key]);
     }
 
     // use original ids if available
