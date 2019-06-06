@@ -25,13 +25,33 @@ export const columns = [
   },
   {
     formula: true,
+    key: "visible",
+    name: "Visible",
+  },
+  {
+    formula: true,
     key: "size",
     name: "Size",
   },
   {
     formula: true,
+    key: "label",
+    name: "Label",
+  },
+  {
+    formula: true,
+    key: "label_width",
+    name: "Label Width",
+  },
+  {
+    formula: true,
     key: "label_font_size",
     name: "Label font size",
+  },
+  {
+    formula: true,
+    key: "label_width",
+    name: "Label width",
   },
   {
     formula: true,

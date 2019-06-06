@@ -24,6 +24,10 @@ export const columns = [
     name: "Source Name",
   },
   {
+    key: "interaction",
+    name: "Interaction",
+  },
+  {
     key: "target",
     name: "Target",
   },

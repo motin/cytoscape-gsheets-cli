@@ -49,6 +49,12 @@ export const nodesImport = async (
     if (spreadsheetItem.size) {
       spreadsheetItem.size = parseInt(spreadsheetItem.size, 10);
     }
+    if (spreadsheetItem.label_width) {
+      spreadsheetItem.label_width = parseInt(
+        spreadsheetItem.label_width,
+        10,
+      );
+    }
     if (spreadsheetItem.label_font_size) {
       spreadsheetItem.label_font_size = parseInt(
         spreadsheetItem.label_font_size,
