@@ -13,7 +13,7 @@ npm run cli -- \
   --gsheetCreate 1
 ```
 
-Push Cytoscape networks.js data to Gsheets:
+Push Cytoscape networks.js (Export -> Network to Web Page... -> Networks and Style JSON files only (No HTML) -> Unzip the file) data to Gsheets:
 ```
 source .env.example
 npm run cli -- \
@@ -35,7 +35,7 @@ npm run cli -- \
   --spreadsheetId "<use-one-created-using-gsheetCreate>"
 ```
 
-Import data from Gsheets into networks.js:
+Import data from Gsheets into networks.js and networks.js.cyjs (Import the latter):
 ```
 source .env.example
 npm run cli -- \
