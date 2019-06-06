@@ -30,6 +30,21 @@ export const columns = [
   },
   {
     formula: true,
+    key: "node_rendering_mode",
+    name: "node_rendering_mode",
+  },
+  {
+    formula: true,
+    key: "area",
+    name: "Area",
+  },
+  {
+    formula: true,
+    key: "diameter",
+    name: "Diameter",
+  },
+  {
+    formula: true,
     key: "size",
     name: "Size",
   },
@@ -37,6 +52,11 @@ export const columns = [
     formula: true,
     key: "label",
     name: "Label",
+  },
+  {
+    formula: true,
+    key: "obfuscated_label",
+    name: "Obfuscated Label",
   },
   {
     formula: true,
@@ -107,6 +127,71 @@ export const columns = [
     formula: true,
     key: "tree_level_4_name",
     name: "Tree level 4 Name",
+  },
+  {
+    formula: true,
+    key: "unaggregated_node_hours",
+    name: "unaggregated_node_hours",
+  },
+  {
+    formula: true,
+    key: "level1_children_unaggregated_node_hours",
+    name: "level1_children_unaggregated_node_hours",
+  },
+  {
+    formula: true,
+    key: "level2_children_unaggregated_node_hours",
+    name: "level2_children_unaggregated_node_hours",
+  },
+  {
+    formula: true,
+    key: "level3_children_unaggregated_node_hours",
+    name: "level3_children_unaggregated_node_hours",
+  },
+  {
+    formula: true,
+    key: "children_unaggregated_node_hours",
+    name: "children_unaggregated_node_hours",
+  },
+  {
+    formula: true,
+    key: "parent_distributed_node_hours",
+    name: "parent_distributed_node_hours",
+  },
+  {
+    formula: true,
+    key: "tree_aggregated_node_hours",
+    name: "tree_aggregated_node_hours",
+  },
+  {
+    formula: true,
+    key: "edge_aggregated_hours",
+    name: "edge_aggregated_hours",
+  },
+  {
+    formula: true,
+    key: "level1_children_edge_aggregated_node_hours",
+    name: "level1_children_edge_aggregated_node_hours",
+  },
+  {
+    formula: true,
+    key: "level2_children_edge_aggregated_node_hours",
+    name: "level2_children_edge_aggregated_node_hours",
+  },
+  {
+    formula: true,
+    key: "level3_children_edge_aggregated_node_hours",
+    name: "level3_children_edge_aggregated_node_hours",
+  },
+  {
+    formula: true,
+    key: "aggregated_node_hours",
+    name: "aggregated_node_hours",
+  },
+  {
+    formula: true,
+    key: "hours_percentage",
+    name: "hours_percentage",
   },
 ];
 
