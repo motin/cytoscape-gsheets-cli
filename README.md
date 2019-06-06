@@ -7,7 +7,7 @@ Allows using Google Spreadsheets to edit [Cytoscape](https://cytoscape.org/) net
 Create a Google Spreadsheet to use with this cli:
 ```
 source .env.example
-npm run build && npm run cli -- \
+npm run cli -- \
   --googleOauth2ClientId "$GOOGLE_OAUTH2_CLIENT_ID" \
   --gsheetsApiCredentialsFile "$GSHEETS_API_CREDENTIALS_FILE" \
   --gsheetCreate 1
@@ -16,7 +16,7 @@ npm run build && npm run cli -- \
 Push Cytoscape networks.js data to Gsheets:
 ```
 source .env.example
-npm run build && npm run cli -- \
+npm run cli -- \
   --googleOauth2ClientId "$GOOGLE_OAUTH2_CLIENT_ID" \
   --gsheetsApiCredentialsFile "$GSHEETS_API_CREDENTIALS_FILE" \
   --gsheetExport 1 \
@@ -28,7 +28,7 @@ npm run build && npm run cli -- \
 Check and fix relational data in Gsheets:
 ```
 source .env.example
-npm run build && npm run cli -- \
+npm run cli -- \
   --googleOauth2ClientId "$GOOGLE_OAUTH2_CLIENT_ID" \
   --gsheetsApiCredentialsFile "$GSHEETS_API_CREDENTIALS_FILE" \
   --gsheetFix 1 \
@@ -38,7 +38,7 @@ npm run build && npm run cli -- \
 Import data from Gsheets into networks.js:
 ```
 source .env.example
-npm run build && npm run cli -- \
+npm run cli -- \
   --googleOauth2ClientId "$GOOGLE_OAUTH2_CLIENT_ID" \
   --gsheetsApiCredentialsFile "$GSHEETS_API_CREDENTIALS_FILE" \
   --gsheetImport 1 \
