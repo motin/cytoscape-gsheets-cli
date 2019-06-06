@@ -9,12 +9,11 @@
   "private": true,
   "keywords": [],
   "scripts": {
-    "upgrade-local": "npx ncu --upgrade @ttbwsd/core && npm install",
     "info": "npm-scripts-info",
     "build": "run-s clean && run-p build:*",
     "build:main": "tsc -p tsconfig.json",
     "build:module": "echo INACTIVATED MODULE BUILD # tsc -p tsconfig.module.json",
-    "build:cli": "echo INACTIVATED CLI BINARY BUILD # rollup -c | nexe --resource \"./res/**/*\" -o build/ttbwsd-cli",
+    "build:cli": "echo INACTIVATED CLI BINARY BUILD # rollup -c | nexe --resource \"./res/**/*\" -o build/cytoscape-gsheets-cli",
     "cli": "node build/main/cli.js",
     "cli:0x": "0x -o -P 'autocannon localhost:$PORT' build/main/cli.js",
     "cli:debug": "echo \"Open about:inspect in Chrome -> Open dedicated DevTools for Node -> Resume script execution\" && node --inspect-brk build/main/cli.js",
@@ -41,8 +40,7 @@
     "clean": "trash build test",
     "all": "run-s reset test cov:check doc:html",
     "prepare": "run-s test:lint build",
-    "prepare-release": "run-s all version doc:publish",
-    "pkg": "rm -rf node_modules/pouchdb-fauxton && rm -rf node_modules/@ttbwsd/core/node_modules/pouchdb-fauxton && pkg ."
+    "prepare-release": "run-s all version doc:publish"
   },
   "scripts-info": {
     "info": "Display information about the package scripts",
