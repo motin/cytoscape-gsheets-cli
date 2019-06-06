@@ -80,6 +80,9 @@ export interface Position {
 // and asserts the results of JSON.parse at runtime
 export class Convert {
   public static toNetwork(json: string): Network {
+    if (!json) {
+      throw new Error(`Invalid json supplied to toNetwork: ${json}`);
+    }
     return cast(JSON.parse(json), r("Network"));
   }
 

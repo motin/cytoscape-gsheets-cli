@@ -33,7 +33,6 @@ export const edgesExport = async (
 
   const {
     idColIndex,
-    nameColIndex,
     syncStatusColIndex,
     noopUpdateRow,
     mapEdgeToValueRow,
@@ -62,12 +61,12 @@ export const edgesExport = async (
       );
       // update the pre-existing rows - being sure to set undefined for columns that we do not want to modify
       mergedRow = await mapEdgeToValueRow(matchingEdge);
+      mergedRow[syncStatusColIndex] = "Merged";
     } else {
       // annotate the rows that have no corresponding hash in the database
       mergedRow = noopUpdateRow();
       mergedRow[syncStatusColIndex] = "Orphaned";
       mergedRow[idColIndex] = existingId;
-      mergedRow[nameColIndex] = existingValueRow[nameColIndex];
     }
 
     return mergedRow;

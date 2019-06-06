@@ -44,7 +44,7 @@ export const columns = [
   },
   {
     formula: true,
-    key: "suid",
+    key: "SUID", // Always exported by cytoscape in capital letters
     name: "SUID",
   },
   {

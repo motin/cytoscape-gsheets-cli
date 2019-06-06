@@ -59,6 +59,9 @@ export async function runGsheetImport(
     networksJsFileContents.indexOf("{"),
   );
   const networksJs = JSON.parse(networksJsJson);
+  if (!networksJs[networkName]) {
+    throw new Error(`No network with name "${networkName}" in networks JSON`);
+  }
   const network: Network = Convert.toNetwork(
     JSON.stringify(networksJs[networkName]),
   );

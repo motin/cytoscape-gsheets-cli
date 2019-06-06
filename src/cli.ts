@@ -146,6 +146,7 @@ try {
         networksJsPath,
         networkName,
       ).catch(error => {
+        console.error(error.stack);
         throw new Error(error);
       });
     }
